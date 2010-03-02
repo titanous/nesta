@@ -138,12 +138,12 @@ class Page < FileModel
     Regexp.last_match(1)
   end
 
-  def to_html
+  def to_html(scope = nil)
     case @format
     when :mdown
       Maruku.new(markup).to_html
     when :haml
-      Haml::Engine.new(markup).to_html
+      Haml::Engine.new(markup).to_html(scope)
     when :textile
       RedCloth.new(markup).to_html
     end
