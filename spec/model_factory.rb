@@ -50,6 +50,16 @@ module ModelFactory
     }.merge(options)
     create_page(o, &block)
   end
+
+  def create_attachment(options = {})
+    o = {
+      :path => Nesta::Configuration.attachment_path,
+      :filename => "test.txt",
+      :contents => "I'm a test attachment"
+    }.merge(options)
+    path = File.join(o[:path], o[:filename])
+    File.open(path, "w") { |file| file.write(o[:contents]) }
+  end
   
   def create_menu(*paths)
     menu_file = filename(Nesta::Configuration.content_path, "menu", :txt)

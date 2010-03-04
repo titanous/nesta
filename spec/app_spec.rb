@@ -312,8 +312,7 @@ describe "attachments" do
   def create_attachment
     stub_configuration
     create_content_directories
-    path = File.join(Nesta::Configuration.attachment_path, "test.txt")
-    File.open(path, "w") { |file| file.write("I'm a test attachment") }
+    super
   end
   
   before(:each) do
