@@ -305,21 +305,10 @@ describe "page" do
   end
 end
 
-describe "attachments" do
+describe "Attachment", :shared => true do
   include ModelFactory
   include RequestSpecHelper
 
-  def create_attachment
-    stub_configuration
-    create_content_directories
-    super
-  end
-  
-  before(:each) do
-    create_attachment
-    get "/attachments/test.txt"
-  end
-  
   after(:each) do
     remove_fixtures
     FileModel.purge_cache
@@ -336,4 +325,15 @@ describe "attachments" do
   it "should set the appropriate MIME type" do
     last_response.headers["Content-Type"].should == "text/plain"
   end
+end
+
+describe "regular attachment" do
+  before(:each) do
+    stub_configuration
+    create_content_directories
+    create_attachment
+    get "/attachments/test.txt"
+  end
+
+  it_should_behave_like "Attachment"
 end
