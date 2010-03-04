@@ -336,3 +336,15 @@ describe "regular attachment" do
 
   it_should_behave_like "Attachment"
 end
+
+describe "standalone attachment" do
+  before(:each) do
+    stub_configuration
+    create_content_directories
+    create_article(:path => "standalone-page/page")
+    create_attachment(:path => "standalone-page", :standalone => true)
+    get "standalone-page/test.txt"
+  end
+
+  it_should_behave_like "Attachment"
+end

@@ -152,10 +152,15 @@ get "/sitemap.xml" do
 end
 
 get "*" do
-  set_common_variables
-  @page = Page.find_by_path(File.join(params[:splat]))
-  raise Sinatra::NotFound if @page.nil?
-  set_title(@page)
-  set_from_page(:description, :keywords)
-  cache haml(:page)
+  filename = File.join(params[:splat])
+  if @page = Page.find_by_path(filename)
+    set_common_variables
+    set_title(@page)
+    set_from_page(:description, :keywords)
+    cache haml(:page)
+  elsif attachment = Attachment.find(filename)
+    send_file(attachment, :disposition => nil)
+  else
+    raise Sinatra::NotFound if @page.nil?
+  end
 end

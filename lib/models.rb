@@ -235,3 +235,18 @@ class Page < FileModel
       end
     end
 end
+
+class Attachment < FileModel
+  FORMATS = FileModel::FORMATS + [:sass]
+
+  def self.find(attachment_path)
+    filename = Nesta::Configuration.page_path(attachment_path)
+    if File.exist?(filename) &&
+     FORMATS.reject { |f| File.basename(attachment_path) != "page.#{f}" }.empty? && # the requested attachment isn't a special page file
+     !FileModel::FORMATS.select { |f| File.exist?(File.join(File.dirname(filename), "page.#{f}")) }.empty? # the directory containing the attachment also has a page file
+      filename
+    else
+      false
+    end
+  end
+end

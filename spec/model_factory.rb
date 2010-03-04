@@ -53,13 +53,13 @@ module ModelFactory
 
   def create_attachment(options = {})
     o = {
-      :path => Nesta::Configuration.attachment_path,
+      :path => '/',
       :filename => "test.txt",
       :contents => "I'm a test attachment"
     }.merge(options)
-    FileUtils.mkdir_p(o[:path])
-    path = File.join(o[:path], o[:filename])
-    File.open(path, "w") { |file| file.write(o[:contents]) }
+    path_prefix = o[:standalone] ? Nesta::Configuration.page_path : Nesta::Configuration.attachment_path
+    FileUtils.mkdir_p(File.join(path_prefix, o[:path]))
+    File.open(File.join(path_prefix, o[:path], o[:filename]), "w") { |file| file.write(o[:contents]) }
   end
   
   def create_menu(*paths)

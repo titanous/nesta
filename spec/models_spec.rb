@@ -310,3 +310,42 @@ describe "Textile page" do
 
   it_should_behave_like "Page"
 end
+
+describe "Attachment class" do
+  include ModelFactory
+
+  before(:each) do
+    stub_configuration
+  end
+  
+  after(:each) do
+    remove_fixtures
+    FileModel.purge_cache
+  end
+
+  def create_standalone_page
+    create_article(:path => "standalone-page/page")
+  end
+
+  it "should not find non-existant files" do
+    Attachment.find("/foo.txt").should be_false
+  end
+
+  it "should not find page files" do
+    create_standalone_page
+    Attachment.find("/standalone-page/page.mdown").should be_false
+  end
+
+  it "should only find files contained in standalone directories" do
+    create_article
+    create_attachment(:path => "article-prefix", :standalone => true)
+    Attachment.find("/article-prefix/test.txt").should be_false
+  end
+
+  it "should find standalone attachments" do
+    create_standalone_page
+    create_attachment(:path => "standalone-page", :standalone => true)
+    Attachment.find("/standalone-page/test.txt").should == 
+      File.join(Nesta::Configuration.page_path, "standalone-page/test.txt")
+  end
+end
