@@ -49,7 +49,7 @@ describe "home page" do
   
   after(:each) do
     remove_fixtures
-    FileModel.purge_cache
+    Page.purge_cache
   end
   
   it_should_behave_like "page with menus"
@@ -149,7 +149,7 @@ describe "article" do
   
   after(:each) do
     remove_fixtures
-    FileModel.purge_cache
+    Page.purge_cache
   end
   
   describe "that's not assigned to a category" do
@@ -233,7 +233,7 @@ describe "page" do
 
   after(:each) do
     remove_fixtures
-    FileModel.purge_cache
+    Page.purge_cache
   end
   
   it_should_behave_like "page with menus"
@@ -311,7 +311,7 @@ describe "Attachment", :shared => true do
 
   after(:each) do
     remove_fixtures
-    FileModel.purge_cache
+    Page.purge_cache
   end
   
   it "should be served successfully" do

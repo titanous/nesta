@@ -40,7 +40,7 @@ describe "Page", :shared => true do
   
   after(:each) do
     remove_fixtures
-    FileModel.purge_cache
+    Page.purge_cache
   end
   
   it "should be findable" do
@@ -320,7 +320,7 @@ describe "Attachment class" do
   
   after(:each) do
     remove_fixtures
-    FileModel.purge_cache
+    Page.purge_cache
   end
 
   def create_standalone_page
