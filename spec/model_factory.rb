@@ -57,6 +57,7 @@ module ModelFactory
       :filename => "test.txt",
       :contents => "I'm a test attachment"
     }.merge(options)
+    FileUtils.mkdir_p(o[:path])
     path = File.join(o[:path], o[:filename])
     File.open(path, "w") { |file| file.write(o[:contents]) }
   end

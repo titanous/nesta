@@ -330,7 +330,6 @@ end
 describe "regular attachment" do
   before(:each) do
     stub_configuration
-    create_content_directories
     create_attachment
     get "/attachments/test.txt"
   end
