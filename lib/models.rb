@@ -206,6 +206,21 @@ class Page < FileModel
     Page.find_articles.select { |article| article.categories.include?(self) }
   end
 
+  def standalone_file(file)
+    if standalone?
+      file = File.join(File.dirname(@filename), file)
+      file if File.exist?(file)
+    end
+  end
+
+  def stylesheet
+    standalone_file("page.sass")
+  end
+
+  def javascript
+    standalone_file("page.js")
+  end
+
   private
     def metadata(key)
       @metadata[key]

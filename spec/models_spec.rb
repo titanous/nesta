@@ -316,6 +316,10 @@ end
 describe "standalone page" do
   include ModelFactory
 
+  def create_attachment(options = {})
+    super(options.merge(:path => "orange", :standalone => true))
+  end
+
   before(:each) do
     stub_configuration
     create_page(:heading => "Orange", :path => "orange/page", :ext => :haml)
@@ -334,6 +338,20 @@ describe "standalone page" do
 
   it "should set the permalink properly" do
     @page.permalink.should == "orange"
+  end
+
+  it "should find a standalone stylesheet" do
+    create_attachment(:filename => "page.sass")
+    @page.stylesheet.should == File.join(Nesta::Configuration.page_path, "orange/page.sass")
+  end
+
+  it "should find a standalone javascript" do
+    create_attachment(:filename => "page.js")
+    @page.javascript.should == File.join(Nesta::Configuration.page_path, "orange/page.js")
+  end
+
+  it "should not find a non-existant standalone attachment" do
+    @page.standalone_file("foo.txt").should be_false
   end
 end
 
