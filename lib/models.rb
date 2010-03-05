@@ -64,6 +64,7 @@ class Page < FileModel
     def load(path)
       FORMATS.each do |format|
         filename = model_path("#{path}.#{format}")
+        filename = File.join(model_path(path), "page.#{format}") unless File.exist?(filename)
         if File.exist?(filename) && needs_loading?(path, filename)
           @@cache[path] = self.new(filename)
           break
@@ -97,8 +98,12 @@ class Page < FileModel
     self.path == other.path
   end
 
+  def standalone?
+    File.basename(@filename, ".*") == "page"
+  end
+
   def permalink
-    File.basename(@filename, ".*")
+    standalone? ? File.basename(File.dirname(@filename)) : File.basename(@filename, ".*")
   end
 
   def heading

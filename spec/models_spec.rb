@@ -50,9 +50,11 @@ describe "Page", :shared => true do
 
   it "should find by path" do
     create_page(:heading => "Banana", :path => "banana")
-    Page.find_by_path("banana").heading.should == "Banana"
+    p = Page.find_by_path("banana")
+    p.heading.should == "Banana"
+    p.standalone?.should be_false
   end
-  
+
   it "should not find non existant page" do
     Page.find_by_path("no-such-page").should be_nil
   end
@@ -256,6 +258,22 @@ describe "Page", :shared => true do
     
     it "should not have keywords" do
       @article.keywords.should be_nil
+    end
+  end
+
+  describe "standalone" do
+    before(:each) do
+      create_page(:heading => "Orange", :path => "orange/page")
+      @page = Page.find_by_path("orange")
+    end
+
+    it "should be findable" do
+      @page.heading.should == "Orange"
+      @page.standalone?.should be_true
+    end
+
+    it "should set the permalink properly" do
+      @page.permalink.should == "orange"
     end
   end
   
