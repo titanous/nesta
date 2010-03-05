@@ -16,15 +16,6 @@ class FileModel
     @mtime = File.mtime(filename)
   end
 
-  def path
-    abspath.sub(/^\//, "")
-  end
-
-  def abspath
-    prefix = File.dirname(@filename).sub(Nesta::Configuration.page_path, "")
-    File.join(prefix, permalink)
-  end
-
   def last_modified
     @last_modified ||= File.stat(@filename).mtime
   end
@@ -104,6 +95,15 @@ class Page < FileModel
 
   def permalink
     standalone? ? File.basename(File.dirname(@filename)) : File.basename(@filename, ".*")
+  end
+
+  def path
+    abspath.sub(/^\//, "")
+  end
+
+  def abspath
+    prefix = File.dirname(@filename).sub(Nesta::Configuration.page_path, "")
+    File.join(prefix, permalink)
   end
 
   def heading
