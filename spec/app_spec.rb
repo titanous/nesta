@@ -305,6 +305,47 @@ describe "page" do
   end
 end
 
+describe "standalone page" do
+  include ModelFactory
+  include RequestSpecHelper
+
+  def create_attachment(options = {})
+    super(options.merge(:path => "standalone-page", :standalone => true))
+  end
+
+  before(:each) do
+    stub_configuration
+    create_article(:path => "standalone-page/page")
+    get "/standalone-page"
+  end
+
+  after(:each) do
+    remove_fixtures
+    Page.purge_cache
+  end
+
+  it "should render successfully" do
+    body.should have_tag("p", "Content goes here")
+  end
+
+  it "should not include the master css" do
+    body.should_not have_tag("link[@href$=master.css]")
+  end
+
+  it "should not include page-specific css or js if it doesn't exist" do
+    body.should_not have_tag("link[@href$=page.css]")
+    body.should_not have_tag("script[@src$=page.js]")
+  end
+
+  it "should include page-specific css and js" do
+    create_attachment(:filename => "page.sass", :contents => "body\n  text-align: left")
+    create_attachment(:filename => "page.js")
+    get "/standalone-page"
+    body.should have_tag("link[@href$=page.css]")
+    body.should have_tag("script[@src$=page.js]")
+  end
+end
+
 describe "Attachment", :shared => true do
   include ModelFactory
   include RequestSpecHelper

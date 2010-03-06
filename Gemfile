@@ -6,6 +6,8 @@ gem "maruku", "0.6.0"
 gem "RedCloth", "4.2.2"
 gem "sinatra", "1.0.a"
 
+gem "sinatra-outputbuffer", "0.1.0"
+
 group :development do
   gem "shotgun"
 end

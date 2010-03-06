@@ -1,0 +1,7 @@
+- content_for :head do
+  - if @page.stylesheet
+    %link{ :href => @page.stylesheet, :media => "screen", :rel => "stylesheet", :type => "text/css" }
+  - if @page.javascript
+    %script{ :src => @page.javascript, :type => "text/javascript" }
+
+~ @page.to_html(self)

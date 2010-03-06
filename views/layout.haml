@@ -7,7 +7,9 @@
     - if @keywords
       %meta{ "name" => "keywords", "content" => @keywords }
     %title= @title
-    %link{ :href => "/css/master.css", :media => "screen", :rel => "stylesheet", :type => "text/css" }
+    - unless @disable_master_stylesheet
+      %link{ :href => "/css/master.css", :media => "screen", :rel => "stylesheet", :type => "text/css" }
+    = yield_content :head
     %link{ :href => "/articles.xml", :rel => "alternate", :type => "application/atom+xml" }
   %body{ :class => @body_class }
     #container

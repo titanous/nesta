@@ -3,6 +3,7 @@ require "sinatra"
 require "builder"
 require "haml"
 require "sass"
+require "sinatra/outputbuffer"
 
 require "lib/cache"
 require "lib/configuration"
@@ -169,7 +170,12 @@ get "*" do
     set_common_variables
     set_title(@page)
     set_from_page(:description, :keywords)
-    cache haml(:page)
+    if @page.standalone?
+      @disable_master_stylesheet = true
+      cache haml(:standalone)
+    else
+      cache haml(:page)
+    end
   elsif attachment = Attachment.find(filename)
     send_file(attachment, :disposition => nil)
   else
