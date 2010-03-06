@@ -333,14 +333,18 @@ describe "standalone page" do
 
   it "should be findable" do
     @page.heading.should == "Orange"
+  end
+
+  it "should know that it is standalone" do
     @page.standalone?.should be_true
+    Page.standalone?("/orange").should be_true
   end
 
   it "should set the permalink properly" do
     @page.permalink.should == "orange"
   end
 
-  it "should set the abspath correctly" do
+  it "should set the absolute path correctly" do
     @page.abspath.should == "/orange"
   end
 
@@ -350,12 +354,22 @@ describe "standalone page" do
 
   it "should find a standalone stylesheet" do
     create_attachment(:filename => "page.sass")
-    @page.stylesheet.should == File.join(Nesta::Configuration.page_path, "orange/page.sass")
+    @page.stylesheet.should == "/orange/page.css"
+    Page.stylesheet("/orange").should ==
+      File.join(Nesta::Configuration.page_path, "orange/page.sass")
   end
 
   it "should find a standalone javascript" do
     create_attachment(:filename => "page.js")
-    @page.javascript.should == File.join(Nesta::Configuration.page_path, "orange/page.js")
+    @page.javascript.should == "/orange/page.js"
+    Page.javascript("/orange").should ==
+      File.join(Nesta::Configuration.page_path, "orange/page.js")
+  end
+
+  it "should find standalone attachments" do
+    create_attachment
+    @page.standalone_file("test.txt").should == 
+      File.join(Nesta::Configuration.page_path, "orange/test.txt")
   end
 
   it "should not find a non-existant standalone attachment" do

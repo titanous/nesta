@@ -64,6 +64,25 @@ class Page < FileModel
       @@cache[path]
     end
 
+    def standalone?(page_path)
+      page_pattern = File.join(model_path(page_path), "page.{#{FORMATS.join(',')}}")
+      !Dir.glob(page_pattern).empty?
+    end
+
+    def stylesheet(page_path)
+      if standalone?(page_path)
+        style = File.join(model_path(page_path), "page.sass")
+        style if File.exist?(style)
+      end
+    end
+
+    def javascript(page_path)
+      if standalone?(page_path)
+        script = File.join(model_path(page_path), "page.js")
+        script if File.exist?(script)
+      end
+    end
+
     def purge_cache
       @@cache = {}
     end
@@ -214,11 +233,11 @@ class Page < FileModel
   end
 
   def stylesheet
-    standalone_file("page.sass")
+    File.join(abspath, "page.css") if standalone_file("page.sass")
   end
 
   def javascript
-    standalone_file("page.js")
+    File.join(abspath, "page.js") if standalone_file("page.js")
   end
 
   private
