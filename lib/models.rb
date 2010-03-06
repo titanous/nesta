@@ -72,14 +72,14 @@ class Page < FileModel
     def stylesheet(page_path)
       if standalone?(page_path)
         style = File.join(model_path(page_path), "page.sass")
-        style if File.exist?(style)
+        Sass::Engine.new(File.read(style)).render if File.exist?(style)
       end
     end
 
     def javascript(page_path)
       if standalone?(page_path)
         script = File.join(model_path(page_path), "page.js")
-        script if File.exist?(script)
+        File.read(script) if File.exist?(script)
       end
     end
 

@@ -338,12 +338,30 @@ describe "regular attachment" do
 end
 
 describe "standalone attachment" do
+  def create_attachment(options = {})
+    super(options.merge(:path => "standalone-page", :standalone => true))
+  end
+
   before(:each) do
     stub_configuration
     create_content_directories
     create_article(:path => "standalone-page/page")
-    create_attachment(:path => "standalone-page", :standalone => true)
+    create_attachment
     get "standalone-page/test.txt"
+  end
+
+  it "should render stylesheet" do
+    create_attachment(:filename => "page.sass", :contents => "body\n  text-align: left")
+    get "standalone-page/page.css"
+    last_response.headers['Content-Type'].should == "text/css;charset=utf-8"
+    body.should match(/text-align/)
+  end
+
+  it "should render javascript" do
+    create_attachment(:filename => "page.js")
+    get "standalone-page/page.js"
+    last_response.headers['Content-Type'].should == "text/javascript;charset=utf-8"
+    body.should match(/test/)
   end
 
   it_should_behave_like "Attachment"

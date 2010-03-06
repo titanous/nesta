@@ -151,6 +151,18 @@ get "/sitemap.xml" do
   cache builder(:sitemap)
 end
 
+get "*/page.css" do
+  content_type "text/css", :charset => "utf-8"
+  raise Sinatra::NotFound unless stylesheet = Page.stylesheet(File.join(params[:splat]))
+  cache stylesheet
+end
+
+get "*/page.js" do
+  content_type "text/javascript", :charset => "utf-8"
+  raise Sinatra::NotFound unless javascript = Page.javascript(File.join(params[:splat]))
+  cache javascript
+end
+
 get "*" do
   filename = File.join(params[:splat])
   if @page = Page.find_by_path(filename)

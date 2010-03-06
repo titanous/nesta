@@ -353,17 +353,15 @@ describe "standalone page" do
   end
 
   it "should find a standalone stylesheet" do
-    create_attachment(:filename => "page.sass")
+    create_attachment(:filename => "page.sass", :contents => "body\n  text-align: left")
     @page.stylesheet.should == "/orange/page.css"
-    Page.stylesheet("/orange").should ==
-      File.join(Nesta::Configuration.page_path, "orange/page.sass")
+    Page.stylesheet("/orange").should match(/text-align/)
   end
 
   it "should find a standalone javascript" do
     create_attachment(:filename => "page.js")
     @page.javascript.should == "/orange/page.js"
-    Page.javascript("/orange").should ==
-      File.join(Nesta::Configuration.page_path, "orange/page.js")
+    Page.javascript("/orange").should match(/test/)
   end
 
   it "should find standalone attachments" do
