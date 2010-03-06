@@ -103,7 +103,7 @@ class Page < FileModel
 
   def abspath
     prefix = File.dirname(@filename).sub(Nesta::Configuration.page_path, "")
-    File.join(prefix, permalink)
+    standalone? ? prefix : File.join(prefix, permalink)
   end
 
   def heading

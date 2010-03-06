@@ -340,6 +340,14 @@ describe "standalone page" do
     @page.permalink.should == "orange"
   end
 
+  it "should set the abspath correctly" do
+    @page.abspath.should == "/orange"
+  end
+
+  it "should set the path correctly" do
+    @page.path.should == "orange"
+  end
+
   it "should find a standalone stylesheet" do
     create_attachment(:filename => "page.sass")
     @page.stylesheet.should == File.join(Nesta::Configuration.page_path, "orange/page.sass")
